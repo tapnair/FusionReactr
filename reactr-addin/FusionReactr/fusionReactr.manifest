@@ -1,0 +1,13 @@
+{
+	"autodeskProduct":	"Fusion360",
+	"type":	"addin",
+	"id":	"ba20b171-d060-4800-aef0-82e6d7d71ceb",
+	"author":	"Patrick Rainsberry",
+	"description":	{
+		"":	"Demo of usingan html UI created with React in a Fusion 360 Addin"
+	},
+	"version":	"1.0.0",
+	"runOnStartup":	false,
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true
+}
