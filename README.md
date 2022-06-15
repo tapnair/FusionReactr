@@ -8,6 +8,24 @@ Fusion 360 Add-in to demonstrate building a more complex HTML UI
 
 ### Needs significant documentation.
 
+## Note on developing in Fusion 360
+
+Open `reactr-addin/FusionReactr/config.py`
+
+Find the following:
+
+```
+Set true to run local dev server
+If set False, Execute: npm run build
+This will build the latest changes to static site
+REACT_DEV = True
+```
+
+To distribute the app you would want to do a production build of the web client
+
+Only the add-in and built client files would be distributed.  
+
+__TODO:__ Include build and distribution instructions
 
 ## Steps to used to create this addin:
 

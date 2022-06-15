@@ -8,15 +8,27 @@
 #  DISCLAIMS ANY IMPLIED WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR USE.
 #  THE PUBLISHER DOES NOT WARRANT THAT THE OPERATION OF THE PROGRAM WILL BE
 #  UNINTERRUPTED OR ERROR FREE.
-
 import os
 
+# Set this to False for release
+# When true more messages are logged to the console
 DEBUG = True
 
 # Set true to run local dev server
 # If set False, Execute: npm run build
 # This will build the latest changes to static site
 REACT_DEV = True
+
+# See above
+if REACT_DEV:
+    parameter_table_palette_url = 'http://localhost:3000/'
+
+else:
+    root_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # FIXME - Move build folder inside add-in
+    parameter_table_palette_url = os.path.join(root_dir, 'reactr-client', 'build', '')
+
 
 ADDIN_NAME = os.path.basename(os.path.dirname(__file__))
 COMPANY_NAME = "Autodesk"
@@ -39,13 +51,6 @@ react_demo_panel_after = 'SolidScriptsAddinsPanel'
 # Palettes
 parameter_table_palette_name = 'Fusion 360 Reactr'
 parameter_table_palette_id = f'{ADDIN_NAME}_parameter_table_palette_id '
-
-if REACT_DEV:
-    parameter_table_palette_url = 'http://localhost:3000/'
-else:
-    parameter_table_palette_url = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                               'reactr-client', 'build', '')
-
 
 # Reference for use in some commands
 all_workspace_names = [
