@@ -8,9 +8,19 @@ Fusion 360 Add-in to demonstrate building a more complex HTML UI
 
 ### Needs significant documentation.
 
+## To run the addin:
+1. Clone the repo
+2. Navigate to `/FusionReactr/reactr-client/` in the terminal
+3. Execute `npm install`
+4. Execute `npm start`
+5. Open Fusion 360 Addins Dialog
+6. Select the green plus-sign and navigate to: `/FusionReactr/reactr-addin/FusionReactr/`
+
+![Fusion 360 Addins Dialog](./resources/readme-fusion-addins.png)
+
 ## Note on developing in Fusion 360
 
-Open `reactr-addin/FusionReactr/config.py`
+Open `/FusionReactr/reactr-addin/FusionReactr/config.py`
 
 Find the following:
 
