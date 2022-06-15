@@ -37,7 +37,7 @@ Only the add-in and built client files would be distributed.
 
 __TODO:__ Include build and distribution instructions
 
-## Steps to used to create this addin:
+## Steps used to create this addin:
 
 ### Create top level directory: `FusionReactr`
 
