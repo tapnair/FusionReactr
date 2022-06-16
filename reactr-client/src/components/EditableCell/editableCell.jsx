@@ -10,8 +10,8 @@
  * THE PUBLISHER DOES NOT WARRANT THAT THE OPERATION OF THE PROGRAM WILL BE
  * UNINTERRUPTED OR ERROR FREE.
  */
-
 import React from 'react';
+import Input from "@mui/material/Input";
 
 export const EditableCell = ({row, value: initialValue, updateExpression}) => {
 
@@ -29,6 +29,18 @@ export const EditableCell = ({row, value: initialValue, updateExpression}) => {
     // If the initialValue is changed external, sync it up with our state
     React.useEffect(() => setValue(initialValue), [initialValue])
 
-    return <input value={value} onChange={onChange} onBlur={onBlur} onFocus={onFocus}/>
+    return (
+        <Input
+            size={'small'}
+            disableUnderline
+            value={value}
+            onChange={onChange} onBlur={onBlur} onFocus={onFocus}
+            style={{
+                padding: '3px',
+                border: 'none',
+                fontSize: 'medium'
+            }}
+        />
+    )
 }
 

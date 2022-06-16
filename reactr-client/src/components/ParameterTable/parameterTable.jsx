@@ -10,27 +10,21 @@
  * THE PUBLISHER DOES NOT WARRANT THAT THE OPERATION OF THE PROGRAM WILL BE
  * UNINTERRUPTED OR ERROR FREE.
  */
-
 import React from 'react';
-
 import {useExpanded, useGroupBy, useSortBy, useTable} from "react-table";
 
 import {ParameterTableLayout} from "../ParameterTableLayout/parameterTableLayout";
 import {parameterTableColumns} from "./parameterTableColumns";
-import {getHiddenColumns} from "../ColumnChooser/columnChooser";
+import {getHiddenColumns} from "../ColumnChooser/columnUtils";
 
-export const ParameterTable = ({data, updateExpression}) => {
+const defaultHiddenColumns = ['Favorite', 'Comment', 'Parent'];
 
+export const ParameterTable = ({data, updateExpression, tableName}) => {
     const [columns, memoData] = React.useMemo(() => {
         const columns = parameterTableColumns();
         const tableData = data?.userParameters ?? [];
         return [columns, tableData];
     }, [data]);
-
-    const initialHiddenColumns = React.useMemo(
-        () => getHiddenColumns("ParameterTable"),
-        []
-    );
 
     const tableInstance = useTable(
         {
@@ -39,16 +33,25 @@ export const ParameterTable = ({data, updateExpression}) => {
             expandSubRows: true,
             autoResetExpanded: true,
             initialState: {
-                hiddenColumns: initialHiddenColumns
+                hiddenColumns: defaultHiddenColumns,
             },
-            updateExpression
+            updateExpression,
+            tableName,
         },
         useGroupBy,
         useSortBy,
         useExpanded,
     );
 
+    // FIXME Still not really working quite right
+    React.useEffect(() => {
+        getHiddenColumns(tableName).then((localHiddenColumns) => {
+            console.log(`Reading local hidden Columns ${localHiddenColumns}`)
+            tableInstance.setHiddenColumns(localHiddenColumns ?? defaultHiddenColumns)
+        })
+    }, [tableName, tableInstance]);
+
     return (
-        <ParameterTableLayout{...tableInstance}/>
+        <ParameterTableLayout tableName={tableName} {...tableInstance}/>
     )
 }

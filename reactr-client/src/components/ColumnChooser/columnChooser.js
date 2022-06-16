@@ -10,115 +10,105 @@
  * THE PUBLISHER DOES NOT WARRANT THAT THE OPERATION OF THE PROGRAM WILL BE
  * UNINTERRUPTED OR ERROR FREE.
  */
-
 import React from "react";
-import styles from "./columnChooser.module.css";
-import {ClickAwayListener, Popper} from "@mui/material";
+import Popper from "@mui/material/Popper";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import SettingsIcon from '@mui/icons-material/Settings';
+import IconButton from "@mui/material/IconButton";
+import {saveHiddenColumns} from "./columnUtils";
+import Box from "@mui/material/Box";
+import Checkbox from "@mui/material/Checkbox";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 
-import {getColumns, writeColumns} from "../../connector/fusionSender";
-
-
-function arrayEquals(a, b) {
-    return Array.isArray(a) &&
-        Array.isArray(b) &&
-        a.length === b.length &&
-        a.every((val, index) => val === b[index]);
-}
-
-function writeLocalStorageColumnStates(newStorageColumnStates) {
-    const message = JSON.stringify(newStorageColumnStates)
-    writeColumns(message);
-}
-
-export function saveHiddenColumns(tableName, hiddenColumns) {
-    const oldStorageColumnStates = getLocalStorageColumnStates();
-    if (oldStorageColumnStates?.hasOwnProperty(tableName)) {
-        if ((arrayEquals(oldStorageColumnStates[tableName], hiddenColumns))) {
-            return
-        }
-    }
-    const newStorageColumnStates = {...oldStorageColumnStates};
-    newStorageColumnStates[tableName] = hiddenColumns;
-    writeLocalStorageColumnStates(newStorageColumnStates);
-}
-
-
-async function getLocalStorageColumnStates() {
-    const localStorageColumnStateString = await getColumns();
-
-    if (localStorageColumnStateString) {
-        const localStorageColumnStates = JSON.parse(localStorageColumnStateString);
-        if (localStorageColumnStates) {
-            return localStorageColumnStates
-        }
-    }
-    return {}
-}
-
-export function getHiddenColumns(tableName) {
-    const defaultColumns = {
-        ParameterTable: ['Favorite', 'Comment', 'Parent'],
-    }
-    const oldStorageColumnStates = getLocalStorageColumnStates();
-    // console.log('**********************************getHiddenColumns**************************');
-    // console.log(oldStorageColumnStates);
-    if (oldStorageColumnStates?.hasOwnProperty(tableName)) {
-        return oldStorageColumnStates[tableName]
-    }
-    return defaultColumns[tableName] ?? []
-}
-
-
-
-
-export const ColumnChooserButton = ({name, allColumns, chooserName}) => {
+export const ColumnChooserButton = ({allColumns, state: tState, tableName}) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
-
     const [open, setOpen] = React.useState(false);
+    const id = open ? 'column-chooser-popper' : undefined;
 
     const handleClick = (event) => {
+        open && saveHiddenColumns(tableName, tState.hiddenColumns)
         setAnchorEl(anchorEl ? null : event.currentTarget);
         setOpen((prev) => !prev);
     };
 
-    const handleClickAway = () => {
-        console.log('click away');
-        // setAnchorEl(null);
+    const clickAway = () => {
+        open && saveHiddenColumns(tableName, tState.hiddenColumns)
+        setAnchorEl(null);
         setOpen(false);
     };
 
-    const id = open ? 'simple-popper' : undefined;
-
     return (
-        // FIXME not working
-        <ClickAwayListener onClickAway={handleClickAway}>
-            <>
-                <div id={name} className={styles.columnChooserBtn} onClick={handleClick}>⚙</div>
+        <ClickAwayListener onClickAway={clickAway}>
+            <div>
+                <IconButton
+                    id={'settings-icon-button'}
+                    aria-label="settings"
+                    onClick={handleClick}
+                    sx={{marginLeft: '16px'}}
+                >
+                    <SettingsIcon color='secondary'/>
+                </IconButton>
                 <Popper id={id} open={open} anchorEl={anchorEl}>
-                    <ColumnChooser allColumns={allColumns} chooserName={chooserName}/>
+                    <ColumnChooserMenu allColumns={allColumns}/>
                 </Popper>
-            </>
+            </div>
         </ClickAwayListener>
     )
 }
 
-export const ColumnChooser = ({allColumns, chooserName}) => {
+export const ColumnChooserMenu = ({allColumns}) => {
     return (
-        <div id={chooserName} style={{
-            // display: 'none'
-        }} className={styles.columnChooser}>
-            <div className={styles.columnChooserContainer}>
-                <div className={styles.columnChooserTitle}>Add/Remove Columns</div>
+        <Box sx={{border: '1px solid black', marginLeft: 2, marginTop: 2}}>
+            <List sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper'}} disablePadding dense>
+                <ListItem sx={{bgcolor: 'background.title'}} disablePadding>
+                    <ListItemButton>
+                        <ListItemText
+                            primary='Add/Remove Columns'
+                            primaryTypographyProps={{
+                                color: 'text.primary',
+                                fontWeight: 'bold',
+                                variant: 'body1',
+                            }}
+                        />
+                    </ListItemButton>
+                </ListItem>
                 {allColumns.map(column => column.id !== 'expander' ? (
-                    <div key={column.id} className={styles.columnChooserItem}>
-                        <label className={styles.columnChooserCb}>
-                            <input className={styles.columnChooserCb} type="checkbox"
-                                   {...column.getToggleHiddenProps()} />
-                            {' '}{column.Header}
-                        </label>
-                    </div>
+                    <ListItem key={column.id} disablePadding>
+                        <ListItemButton sx={{
+                            borderBottom: '1px solid #cccccc',
+                        }}>
+                            <ListItemIcon>
+                                <Checkbox
+                                    color="primary"
+                                    edge="start"
+                                    tabIndex={-1}
+                                    disableRipple
+                                    size='small'
+                                    {...column.getToggleHiddenProps()}
+                                    sx={{
+                                        color: '#cccccc',
+                                        '&.Mui-checked': {
+                                            color: '#666666',
+                                        },
+                                    }}
+                                />
+                            </ListItemIcon>
+                            <ListItemText
+                                primary={column.Header}
+                                primaryTypographyProps={{
+                                    color: 'text.subtle',
+                                    fontWeight: 'bold',
+                                    variant: 'body1',
+                                }}
+                            />
+                        </ListItemButton>
+                    </ListItem>
                 ) : '')}
-            </div>
-        </div>
+            </List>
+        </Box>
     )
 }

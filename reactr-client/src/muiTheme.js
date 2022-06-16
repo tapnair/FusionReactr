@@ -41,6 +41,7 @@ export const themeOptions = {
         background: {
             default: '#cccccc',
             paper: '#ffffff',
+            title: '#cccccc',
         },
         status: {
             IDLE: '#cccccc',

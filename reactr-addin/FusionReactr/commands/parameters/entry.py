@@ -43,7 +43,7 @@ PANEL_AFTER = config.react_demo_panel_after
 PALETTE_NAME = config.parameter_table_palette_name
 PALETTE_ID = config.parameter_table_palette_id
 PALETTE_URL = config.parameter_table_palette_url
-PALETTE_DOCKING = adsk.core.PaletteDockingStates.PaletteDockStateRight
+PALETTE_DOCKING = adsk.core.PaletteDockingStates.PaletteDockStateBottom
 
 ICON_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'resources', '')
 

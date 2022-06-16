@@ -13,43 +13,33 @@
 
 import React from "react";
 import {ExpanderCell} from "../ExpanderCell/expanderCell";
-import styles from "./parameterTable.module.css"
 import {ColumnChooserButton} from "../ColumnChooser/columnChooser";
 import {EditableCell} from "../EditableCell/editableCell";
 
 // Define behavior for all columns in the table
 export const parameterTableColumns = () => [
     {
-        Header: ({allColumns}) => ColumnChooserButton({
-            chooserName: 'parameterTableChooser',
-            name: 'parameterTableChooserButton',
-            allColumns
-        }),
+        Header: (T) => ColumnChooserButton(T),
         id: 'expander',
         Cell: ExpanderCell,
-        className: `${styles.left}`,
         disableGroupBy: true,
         Aggregated: () => '',
-        headerClassName: `${styles.center}`
     },
     {
         Header: '#',
         id: 'rowIndex',
         Cell: ({rowNumber}) => rowNumber ? (<span>{rowNumber}</span>) : '',
-        className: `${styles.center} ${styles.index}`,
         disableGroupBy: true,
     },
     {
         Header: 'Name',
         accessor: (d) => d.name,
-        className: `${styles.left}`,
         aggregate: 'count',
         Aggregated: ({value}) => `${value}`,
     },
     {
         Header: 'Value',
         accessor: (d) => d.value,
-        className: `${styles.left}`,
         aggregate: null,
         Cell: ({value}) => `${parseFloat(value).toFixed(3)}`,
         disableGroupBy: true,
@@ -57,14 +47,12 @@ export const parameterTableColumns = () => [
     {
         Header: 'Units',
         accessor: (d) => d.unit,
-        className: `${styles.center}`,
         aggregate: 'count',
         Aggregated: ({value}) => `${value}`,
     },
     {
         Header: 'Expression',
         accessor: (d) => d.expression,
-        className: `${styles.left}`,
         Cell: EditableCell,
         aggregate: null,
         disableGroupBy: true,
@@ -72,7 +60,6 @@ export const parameterTableColumns = () => [
     {
         Header: 'Created By',
         accessor: (d) => d.createdBy,
-        className: `${styles.left}`,
         aggregate: countIfValue,
         Aggregated: ({value}) => `${value}`,
 
@@ -80,7 +67,6 @@ export const parameterTableColumns = () => [
     {
         Header: 'Role',
         accessor: (d) => d.role,
-        className: `${styles.left}`,
         aggregate: countIfValue,
         Aggregated: ({value}) => `${value}`,
         disableGroupBy: true,
@@ -88,7 +74,6 @@ export const parameterTableColumns = () => [
     {
         Header: 'Parent',
         accessor: (d) => d.parent,
-        className: `${styles.left}`,
         aggregate: countIfValue,
         Aggregated: ({value}) => `${value}`,
         disableGroupBy: true,
@@ -96,7 +81,6 @@ export const parameterTableColumns = () => [
     {
         Header: 'Comment',
         accessor: (d) => d.comment,
-        className: `${styles.left}`,
         aggregate: countIfValue,
         Aggregated: ({value}) => `${value}`,
         disableGroupBy: true,
@@ -105,7 +89,6 @@ export const parameterTableColumns = () => [
         Header: 'Favorite',
         accessor: (d) => d.isFavorite,
         Cell: ({value}) => (<span>{value ? "✔" : ""}</span>),
-        className: `${styles.center}`,
         aggregate: countIfValue,
         Aggregated: ({value}) => `${value ? "✔" : ""}`,
     },

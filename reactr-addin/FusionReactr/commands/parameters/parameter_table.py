@@ -9,9 +9,11 @@
 #  THE PUBLISHER DOES NOT WARRANT THAT THE OPERATION OF THE PROGRAM WILL BE
 #  UNINTERRUPTED OR ERROR FREE.
 import json
+import os
+
 import adsk.core
 import adsk.fusion
-
+from ... import config
 from .types.Parameter import Parameter
 
 app = adsk.core.Application.get()
@@ -29,7 +31,9 @@ def process_request(html_args: adsk.core.HTMLEventArgs):
     # Read message sent from palette javascript and react appropriately.
     ACTION_MAP = {
         'getParameters': get_parameters,
-        'updateParameter': update_parameter
+        'updateParameter': update_parameter,
+        'writeColumns': write_columns,
+        'getColumns': get_columns,
     }
     action_function = ACTION_MAP.get(message_action)
 
@@ -42,6 +46,25 @@ def process_request(html_args: adsk.core.HTMLEventArgs):
     # IMPORTANT Set the returnData field
     # This is the response to the original javascript request
     html_args.returnData = json.dumps(result)
+
+
+def settings_file_name():
+    return os.path.join(config.USER_DIR_PATH, 'column_settings.json')
+
+
+def get_columns(message_data):
+    file_path = settings_file_name()
+    if os.path.exists(file_path):
+        with open(file_path) as json_file:
+            data = json.load(json_file)
+            return data
+    return {'no': 'message'}
+
+
+def write_columns(message_data):
+    with open(settings_file_name(), 'w') as outfile:
+        json.dump(message_data, outfile)
+    return {'no': 'message'}
 
 
 # Get the active document parameter table

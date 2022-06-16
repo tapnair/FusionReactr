@@ -35,6 +35,9 @@ COMPANY_NAME = "Autodesk"
 
 # Name for a directory in user home to store data
 user_dir_name = f'{ADDIN_NAME}'
+USER_DIR_PATH = os.path.join(os.path.expanduser('~'), user_dir_name)
+if not os.path.exists(USER_DIR_PATH):
+    os.mkdir(USER_DIR_PATH)
 
 # Design Workspace
 design_workspace = 'FusionSolidEnvironment'

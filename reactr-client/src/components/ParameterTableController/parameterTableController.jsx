@@ -10,13 +10,11 @@
  * THE PUBLISHER DOES NOT WARRANT THAT THE OPERATION OF THE PROGRAM WILL BE
  * UNINTERRUPTED OR ERROR FREE.
  */
-
-import React from 'react';
+import React, {useMemo} from 'react';
 import {useQuery} from "react-query";
 
 import {ParameterTable} from "../ParameterTable/parameterTable";
 import {getFusionParameters, updateFusionParameters} from "../../connector/fusionSender";
-
 
 export const ParameterTableController = ({queryClient}) => {
     const {isLoading, error, data} = useQuery(
@@ -24,6 +22,7 @@ export const ParameterTableController = ({queryClient}) => {
         () => getFusionParameters(),
         {refetchOnWindowFocus: false}
     );
+    const tableName = useMemo(() => 'ParameterTable', [])
 
     const updateExpression = ({row, value}) => updateFusionParameters({
         parameterName: row.original.name,
@@ -38,6 +37,10 @@ export const ParameterTableController = ({queryClient}) => {
     if (error) return "An error has occurred: " + error.message;
 
     return (
-        <ParameterTable data={data} updateExpression={updateExpression}/>
+        <ParameterTable
+            data={data}
+            updateExpression={updateExpression}
+            tableName={tableName}
+        />
     )
 }
