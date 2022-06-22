@@ -30,17 +30,17 @@ export const ParameterTableLayout = (
         rows,
         prepareRow,
     }
-) => {
-    return (
-        <Paper sx={{width: '100%', overflow: 'hidden'}}>
-            <TableContainer sx={{height: '100vh', px: '5px'}}>
-                <Table stickyHeader size="small" {...getTableProps()}>
-                    <ParameterTableHeader headerGroups={headerGroups}/>
-                    <TableBody {...getTableBodyProps()}>{rows.map((row, i) => {
+) => (
+    <Paper sx={{width: '100%', overflow: 'hidden'}}>
+        <TableContainer sx={{height: '100vh', px: '5px'}}>
+            <Table stickyHeader size="small" {...getTableProps()}>
+                <ParameterTableHeader headerGroups={headerGroups}/>
+                <TableBody {...getTableBodyProps()}>
+                    {rows.map((row, i) => {
                         prepareRow(row);
                         const rowProps = row.getRowProps();
-                        return (
-                            <TableRow {...rowProps} >{row.cells.map(cell => (
+                        return (<TableRow {...rowProps}>
+                            {row.cells.map(cell => (
                                 <TableCell
                                     {...cell.getCellProps()}
                                     style={row.isGrouped ? {background: '#cccccc'} : null}
@@ -60,11 +60,13 @@ export const ParameterTableLayout = (
                                             ? null
                                             : (cell.render('Cell', {rowNumber: i + 1}))
                                 }</TableCell>
-                            ))}</TableRow>
-                        )
-                    })}</TableBody>
-                </Table>
-            </TableContainer>
-        </Paper>)
-}
+                            ))}
+                        </TableRow>)
+                    })}
+                </TableBody>
+            </Table>
+        </TableContainer>
+    </Paper>
+)
+
 

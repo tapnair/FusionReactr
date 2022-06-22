@@ -15,32 +15,34 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 
-export const ParameterTableHeader = ({headerGroups}) => {
-    return (
-        <TableHead>{headerGroups.map(headerGroup => (
-            <TableRow {...headerGroup.getHeaderGroupProps()}>{headerGroup.headers.map(column => (
-                <TableCell
-                    padding='none'
-                    {...column.getHeaderProps()}
-                    sx={{
-                        color: 'text.secondary',
-                        fontWeight: 'bold',
-                        fontSize: 'medium'
-                    }}
-                >
-                    {column.canGroupBy
-                        ? (<span {...column.getGroupByToggleProps()}>
-                                    {column.isGrouped ? '⊠ ' : '⧉ '}
-                        </span>) : null
-                    }
-                    <span {...column.getSortByToggleProps()}>
-                        {column.render('Header')}
-                    </span>
-                    <span>
-                        {column.isSorted ? column.isSortedDesc ? ' ▽' : ' △' : '  '}
-                    </span>
-                </TableCell>
-            ))}</TableRow>
-        ))}</TableHead>
-    )
-}
+export const ParameterTableHeader = ({headerGroups}) => (
+    <TableHead>
+        {headerGroups.map(headerGroup => (
+            <TableRow {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map(column => (
+                    <TableCell
+                        {...column.getHeaderProps()}
+                        sx={{
+                            padding: 'none',
+                            color: 'text.secondary',
+                            fontWeight: 'bold',
+                            fontSize: 'medium'
+                        }}
+                    >{column.canGroupBy ? (
+                        <span {...column.getGroupByToggleProps()}>
+                            {column.isGrouped ? '⊠ ' : '⧉ '}
+                        </span>
+                    ) : null}
+                        <span {...column.getSortByToggleProps()}>
+                            {column.render('Header')}
+                        </span>
+                        <span>
+                            {column.isSorted ? column.isSortedDesc ? ' ▽' : ' △' : '  '}
+                        </span>
+                    </TableCell>
+                ))}
+            </TableRow>
+        ))}
+    </TableHead>
+)
+
