@@ -46,7 +46,8 @@ class Parameter:
             self.is_user_parameter = False
             self.role = parameter.role
             self.component = parameter.component
-            version_id = parameter.component.parentDesign.parentDocument.dataFile.versionId
+            data_file = parameter.component.parentDesign.parentDocument.dataFile
+            version_id = data_file and data_file.versionId
             self.created_by = parameter.createdBy.name
 
         self.id = f'{version_id}-parameter-{parameter.name}-{sub_id}'
