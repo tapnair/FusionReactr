@@ -16,27 +16,28 @@ import {sampleData} from "./sample";
 // For testing and development we check if the adsk object is present.
 // If not then return sample data
 export const getFusionParameters = async () =>
-    window.adsk
+    !!window.adsk
         ? JSON.parse(await fusionRequest("getParameters", {no: 'message'}))
         : sampleData
 
 export const updateFusionParameters = async (message) =>
-    window.adsk
+    !!window.adsk
         ? JSON.parse(await fusionRequest("updateParameter", message))
         : sampleData
 
 export const getColumns = async () =>
-    window.adsk
+    !!window.adsk
         ? fusionRequest("getColumns", {no: 'message'})
         : window.localStorage.getItem("localStorageColumnStates")
 
 export const writeColumns = (message) =>
-    window.adsk
+    !!window.adsk
         ? fusionRequest("writeColumns", message)
         : window.localStorage.setItem("localStorageColumnStates", message)
 
 
 // This is the actual call to the Fusion 360 API
-const fusionRequest = async (action, message) => window.adsk
-    ? window.adsk.fusionSendData(action, JSON.stringify(message))
-    : {no: 'fusion'}
+const fusionRequest = async (action, message) =>
+    !!window.adsk
+        ? window.adsk.fusionSendData(action, JSON.stringify(message))
+        : {no: 'fusion'}
